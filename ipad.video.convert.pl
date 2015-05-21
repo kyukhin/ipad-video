@@ -46,33 +46,52 @@ $lfn="$ofn.log";
 
 print "$lfn\n";
 
-
 if ($url)
 {
 # 140         m4a       audio only  DASH audio , audio@128k
 # 137         mp4       1080p       DASH video , video only
 # 136         mp4       720p        DASH video
-# 135         mp4       480p        DASH video , video only  
+# 135         mp4       480p        DASH video , video only
+
+    my %v_formats = (
+	"137" => "mp4       1080p       DASH video , video only",
+	"136" => "mp4       720p        DASH video",
+	"135" => "mp4       480p        DASH video , video only"
+    );
+
+    my $success=0;
+
+    my %a_formats = (
+	"140" => "m4a       audio only  DASH audio , audio\@128k"
+    );
 
     $ifn = "orig.$ofn";
 
-    $cmd = $downloader;
-    $cmd .= " \"$url\" --write-thumbnail -f \"137+140\" --output \"$ifn\" ";
+    while ((my $acode, my $aname) = each %a_formats)
+    {
+	while ((my $vcode, my $vname) = each %v_formats)
+	{
+	    print "Trying this combination:\n";
+	    print "  $aname\n";
+	    print "  $vname\n";
 
-    print "$cmd\n";
-    system ($cmd) == 0 or print "Error downloading video 1080p, retrying 720p\n";
+	    $cmd = $downloader;
+	    $cmd .= " \"$url\" --write-thumbnail -f \"$acode+$vcode\" --output \"$ifn\" ";
 
-    $cmd = $downloader;
-    $cmd .= " \"$url\" --write-thumbnail -f \"136+140\" --output \"$ifn\" ";
+	    print "$cmd\n";
+	    if ( system ($cmd) == 0 )
+	    {
+		$success = 1;
+		last;
+	    }
+	    else
+	    {
+		print "Error downloading video.\n"
+	    }
+	}
+    }
 
-    print "$cmd\n";
-    system ($cmd) == 0 or print "Error downloading video 720p, retrying 480p\n";
-
-    $cmd = $downloader;
-    $cmd .= " \"$url\" --write-thumbnail -f \"135+140\" --output \"$ifn\" ";
-
-    print "$cmd\n";
-    system ($cmd) == 0 or die "Error downloading video.\n";
+    die "Cannot download video. Stop.\n" if (! $success);
 
     ($tn_fn = $ifn) =~ s/\.[^.]+$//;
     $tn_fn .= ".jpg";
