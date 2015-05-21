@@ -67,13 +67,13 @@ if ($url)
 
     $ifn = "orig.$ofn";
 
-    while ((my $acode, my $aname) = each %a_formats)
+    for my $acode (reverse sort keys %a_formats)
     {
-	while ((my $vcode, my $vname) = each %v_formats)
+	for my $vcode (reverse sort keys %v_formats)
 	{
 	    print "Trying this combination:\n";
-	    print "  $aname\n";
-	    print "  $vname\n";
+	    print "  $a_formats{$acode}\n";
+	    print "  $v_formats{$vcode}\n";
 
 	    $cmd = $downloader;
 	    $cmd .= " \"$url\" --write-thumbnail -f \"$acode+$vcode\" --output \"$ifn\" ";
