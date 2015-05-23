@@ -48,21 +48,28 @@ print "$lfn\n";
 
 if ($url)
 {
+# 141         m4a       audio only  DASH audio  255k , m4a_dash container, aac
 # 140         m4a       audio only  DASH audio , audio@128k
+
+# 299         mp4       1080p60     DASH video , video only
+# 298         mp4       720p60      DASH video , video only
 # 137         mp4       1080p       DASH video , video only
-# 136         mp4       720p        DASH video
+# 136         mp4       720p        DASH video , video only
 # 135         mp4       480p        DASH video , video only
 
     my %v_formats = (
 	"137" => "mp4       1080p       DASH video , video only",
 	"136" => "mp4       720p        DASH video",
+	"299" => "mp4       1080p60     DASH video 4028k , h264, 60fps, video only",
+	"298" => "mp4       720p60      DASH video 2194k , h264, 60fps, video only",
 	"135" => "mp4       480p        DASH video , video only"
     );
 
     my $success=0;
 
     my %a_formats = (
-	"140" => "m4a       audio only  DASH audio , audio\@128k"
+	"141" => "m4a       audio only DASH audio  255k , m4a_dash container, aac  @256k (44100Hz)",
+	"140" => "m4a       audio only DASH audio , audio\@128k"
     );
 
     $ifn = "orig.$ofn";
@@ -76,7 +83,7 @@ if ($url)
 	    print "  $v_formats{$vcode}\n";
 
 	    $cmd = $downloader;
-	    $cmd .= " \"$url\" --write-thumbnail -f \"$acode+$vcode\" --output \"$ifn\" ";
+	    $cmd .= " \"$url\" --write-thumbnail -f \"$vcode+$acode\" --output \"$ifn\" ";
 
 	    print "$cmd\n";
 	    if ( system ($cmd) == 0 )
