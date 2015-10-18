@@ -113,8 +113,9 @@ if ( ! $no_convert_flag)
     $cmd .= " -t $end_time" if ($end_time);
     $cmd .= " -i \"$ifn\" ";
     $cmd .= " -s 1024x768 " if (! $keep_resolution);
+    $cmd .= " -q:v 0 "      if (  $keep_resolution);
     $cmd .= " -filter:v \"scale=1024:-1\" ";
-    $cmd .= " -codec:a aac";
+    $cmd .= " -codec:a aac -b:a 240k";
     $cmd .= " -codec:s mov_text";
     $cmd .= " -strict experimental";
     $cmd .= " -y";
