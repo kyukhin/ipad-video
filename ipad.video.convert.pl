@@ -7,6 +7,7 @@ use Getopt::Long;
 
 my $show_help;
 my $debug_flag;
+my $keep_resolution;
 my $no_convert_flag;
 my $ifn;
 my $ofn;
@@ -33,6 +34,7 @@ GetOptions("help"           => \$show_help,
            "tn-timestamp=s" => \$tn_timestamp,
 	   "tn-file=s"      => \$tn_fn,
 	   "debug"          => \$debug_flag,
+           "keep-resolution"=> \$keep_resolution,
            "no-conv"        => \$no_convert_flag)
     or die ("Error in command line arguments.\n");
 
@@ -110,7 +112,7 @@ if ( ! $no_convert_flag)
     $cmd .= " -ss $start_time " if ($start_time);
     $cmd .= " -t $end_time" if ($end_time);
     $cmd .= " -i \"$ifn\" ";
-    $cmd .= " -s 1024x768 ";
+    $cmd .= " -s 1024x768 " if (! $keep_resolution);
     $cmd .= " -filter:v \"scale=1024:-1\" ";
     $cmd .= " -codec:a aac";
     $cmd .= " -codec:s mov_text";
