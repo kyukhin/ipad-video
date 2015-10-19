@@ -70,7 +70,7 @@ if ($url)
     my $success=0;
 
     my %a_formats = (
-	"141" => "m4a       audio only DASH audio  255k , m4a_dash container, aac  @256k (44100Hz)",
+	"141" => "m4a       audio only DASH audio  255k , m4a_dash container, aac  \@256k (44100Hz)",
 	"140" => "m4a       audio only DASH audio , audio\@128k"
     );
 
