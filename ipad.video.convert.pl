@@ -8,6 +8,7 @@ use Getopt::Long;
 my $show_help;
 my $debug_flag;
 my $keep_resolution;
+my $resolution;
 my $no_convert_flag;
 my $ifn;
 my $ofn;
@@ -35,6 +36,7 @@ GetOptions("help"           => \$show_help,
 	   "tn-file=s"      => \$tn_fn,
 	   "debug"          => \$debug_flag,
            "keep-resolution"=> \$keep_resolution,
+           "set-resolution=s" => \$resolution,
            "no-conv"        => \$no_convert_flag)
     or die ("Error in command line arguments.\n");
 
@@ -112,7 +114,8 @@ if ( ! $no_convert_flag)
     $cmd .= " -ss $start_time " if ($start_time);
     $cmd .= " -t $end_time" if ($end_time);
     $cmd .= " -i \"$ifn\" ";
-    $cmd .= " -s 1024x768 " if (! $keep_resolution);
+    $cmd .= " -s 1024x768 " if (! ($keep_resolution || $resolution));
+    $cmd .= " -s \"$resolution\" " if ($resolution);
     $cmd .= " -q:v 0 "      if (  $keep_resolution);
     $cmd .= " -filter:v \"scale=1024:-1\" ";
     $cmd .= " -codec:a aac -b:a 240k";
@@ -122,6 +125,7 @@ if ( ! $no_convert_flag)
     $cmd .= " $mapping " if ($mapping);
     $cmd .= " -vframes 100 " if ($debug_flag);
     $cmd .= " \"$ofn\" ";
+    $cmd .= " </dev/null";
 
     print "$cmd\n";
     system ($cmd) == 0 or die "Error converting video!\n";
